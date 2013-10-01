@@ -8,6 +8,26 @@ unless ENV["SKIP_COV"]
   SimpleCov.start
 end
 
+require 'chef'
+require 'chef/knife'
+require 'chef_zero'
+require 'chef_zero/server'
+require 'singleton'
+
+class ChefZero::SingleServer
+  def initialize
+    @server = ChefZero::Server.new(port: 8889)
+    @server.start_background
+  end
+  include Singleton
+
+  def clean
+    @server.clear_data
+  end
+end
+
+Chef::Knife.new.configure_chef
+Chef::Config[:chef_server_url] = 'http://127.0.0.1:8889'
 require 'aws'
 require 'rspec/fire'
 require 'spec_support/shared_daemons'
@@ -23,4 +43,8 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  config.before(:each) do
+    ChefZero::SingleServer.instance.clean
+  end
 end

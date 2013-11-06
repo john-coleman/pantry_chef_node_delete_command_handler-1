@@ -6,8 +6,14 @@ describe Wonga::Daemon::PantryChefDeleteNodeCommandHandler do
   subject { described_class.new(publisher, logger) }
   let(:publisher) { instance_double('Wonga::Daemon::Publisher').as_null_object }
   let(:logger) { instance_double('Logger').as_null_object }
-  let(:message) { { 'node' => node_name } }
-  let(:node_name) { 'test.example.com' }
+  let(:message) { 
+    { 'node'    => node,
+      'domain'  => domain
+    } 
+  }
+  let(:node) { 'test' }
+  let(:domain) { 'example.com' }
+  let(:node_name) { "#{node}.#{domain}" }
 
   it_behaves_like 'handler'
 

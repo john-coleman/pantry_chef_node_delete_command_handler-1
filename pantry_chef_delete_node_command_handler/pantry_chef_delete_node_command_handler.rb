@@ -7,8 +7,9 @@ module Wonga
       end
 
       def handle_message(message)
-        Chef::Node.load(message['node']).destroy if Chef::Node.list.keys.include?(message['node'])
-        Chef::ApiClient.load(message['node']).destroy if Chef::ApiClient.list.keys.include?(message['node'])
+        chef_node_name = message['node'] + "." + message['domain'] 
+        Chef::Node.load(chef_node_name).destroy if Chef::Node.list.keys.include?(chef_node_name)
+        Chef::ApiClient.load(chef_node_name).destroy if Chef::ApiClient.list.keys.include?(chef_node_name)
         @publisher.publish(message)
       end
     end

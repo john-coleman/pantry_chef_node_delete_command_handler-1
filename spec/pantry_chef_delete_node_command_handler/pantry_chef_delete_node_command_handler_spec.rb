@@ -3,11 +3,13 @@ require_relative '../../pantry_chef_delete_node_command_handler/pantry_chef_dele
 require 'logger'
 
 describe Wonga::Daemon::PantryChefDeleteNodeCommandHandler do
-  subject { described_class.new(publisher, logger) }
+  subject         { described_class.new(publisher, logger) }
   let(:publisher) { instance_double('Wonga::Daemon::Publisher').as_null_object }
-  let(:logger) { instance_double('Logger').as_null_object }
-  let(:message) { { 'node'    => node_name } }
-  let(:node_name) { 'test' }
+  let(:logger)    { instance_double('Logger').as_null_object }
+  let(:message)   { { 'hostname' => hostname, 'domain' => domain } }
+  let(:hostname)  { 'test' }
+  let(:domain)    { 'example.com' }
+  let(:node_name) { message['hostname'] + "." + message["domain"] }
 
   it_behaves_like 'handler'
 

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git', :tag => 'v0.1.7'
+gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git'
 gem 'chef','~> 11.6.0'
 
 group :development do
@@ -10,7 +10,6 @@ end
 
 group :test, :development do
   gem 'chef-zero'
-  gem 'em-winrm', git: 'https://github.com/besol/em-winrm.git'
   gem 'simplecov', require: false
   gem 'simplecov-rcov', require: false
   gem 'rspec-fire'

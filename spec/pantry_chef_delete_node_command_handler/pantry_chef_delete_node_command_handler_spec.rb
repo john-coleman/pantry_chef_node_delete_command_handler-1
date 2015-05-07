@@ -1,19 +1,19 @@
 require 'spec_helper'
-require_relative '../../pantry_chef_delete_node_command_handler/pantry_chef_delete_node_command_handler'
 require 'logger'
+require_relative '../../pantry_chef_delete_node_command_handler/pantry_chef_delete_node_command_handler'
 
-describe Wonga::Daemon::PantryChefDeleteNodeCommandHandler do
+RSpec.describe Wonga::Daemon::PantryChefDeleteNodeCommandHandler do
   subject         { described_class.new(publisher, logger) }
   let(:publisher) { instance_double('Wonga::Daemon::Publisher').as_null_object }
   let(:logger)    { instance_double('Logger').as_null_object }
   let(:message)   { { 'hostname' => hostname, 'domain' => domain } }
   let(:hostname)  { 'test' }
   let(:domain)    { 'example.com' }
-  let(:node_name) { message['hostname'] + "." + message["domain"] }
+  let(:node_name) { message['hostname'] + '.' + message['domain'] }
 
   it_behaves_like 'handler'
 
-  describe "#handle_message" do
+  describe '#handle_message' do
     before(:each) do
       node = Chef::Node.new
       node.name(node_name)
@@ -23,17 +23,16 @@ describe Wonga::Daemon::PantryChefDeleteNodeCommandHandler do
       api_client.save
     end
 
-    include_examples "send message"
+    include_examples 'send message'
 
-    it "deletes node" do
+    it 'deletes node' do
       subject.handle_message message
       expect(Chef::Node.list.keys).to_not include(node_name)
     end
 
-    it "deletes api_client" do
+    it 'deletes api_client' do
       subject.handle_message message
       expect(Chef::ApiClient.list.keys).to_not include(node_name)
     end
   end
 end
-
